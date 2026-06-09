@@ -7,16 +7,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.devtalles.tu_cv_spring_boot.cv.model.Person;
 
+import lombok.RequiredArgsConstructor;
+
 
 @Controller
 @RequestMapping("/cv")
+@RequiredArgsConstructor
 public class CvController {
+
+  private final Person person;
 
   @GetMapping({"/index", "", "/"})
   public String index(Model model){
-    Person person = new Person("Jose", "Castillo", "Backend Developer");
-    model.addAttribute("name", "Jo");
-    model.addAttribute("person", person);
+    // Person person = new Person("Jose", "Castillo", "Backend Developer");
+    // model.addAttribute("name", "Jo");
+    // model.addAttribute("person", person);
+    model.addAttribute("property", person.getFirstName());
     return "index";
   }
 
