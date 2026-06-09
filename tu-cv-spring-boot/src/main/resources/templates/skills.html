@@ -3,13 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
   <title>Document</title>
 </head>
 <body>
   <h1>Nuestras Habilidades</h1>
   <p th:if="${skills.isEmpty()}">No hay datos</p>
   <ul th:if="${!skills.isEmpty()}">
-    <li th:each="skill : ${skills}" th:text="${skill}">Skill</li>
+    <li th:each="skill, stat : ${skills}">
+      <span th:text="'Habilidad: ' + ${skill.name} + ' | Nivel: ' + ${skill.level}"></span>
+      <a th:href="@{'/skills/id/' + ${stat.index}}">Ver detalles</a>
+    </li>
   </ul>
+
+  <a href="/skills/new">Agregar habilidad</a>
+
+  <form action="/skills" method="get">
+    <label th:for="nombre">Buscar Habilidad</label>
+    <input type="text" th:value="${filter}" name="filter">
+    <button type="submit">Buscar Habilidad</button>
+  </form>
+
 </body>
 </html>
