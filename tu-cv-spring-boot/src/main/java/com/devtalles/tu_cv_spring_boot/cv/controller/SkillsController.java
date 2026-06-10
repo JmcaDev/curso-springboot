@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.devtalles.tu_cv_spring_boot.cv.model.Skill;
 
@@ -62,15 +63,39 @@ public class SkillsController {
     return "skills";
   }
 
+  // @GetMapping("/name/{name}")
+  // public String showFilteredSkillByName(@PathVariable String name,Model model){
+  //   List<Skill> skillsFilter = skills.stream()
+  //     .filter(skill -> skill.getName().equalsIgnoreCase(name))
+  //     .toList();
+
+  //   if(skillsFilter.isEmpty()){
+
+  //     model.addAttribute("filterMessage", "No se encontraron resultados para: " + name);
+
+  //     return "forward:/skills";
+  //   }
+
+  //   model.addAttribute("skills", skillsFilter);
+  //   model.addAttribute("filterMessage", "Filtro: " + name);
+  //   return "skills";
+  // }
+
   @GetMapping("/name/{name}")
-  public String showFilteredSkillByName(@PathVariable String name,Model model){
+  public String showFilteredSkillByName(@PathVariable String name,RedirectAttributes redirectAttributes){
     List<Skill> skillsFilter = skills.stream()
       .filter(skill -> skill.getName().equalsIgnoreCase(name))
       .toList();
 
-    model.addAttribute("skills", skillsFilter);
-    model.addAttribute("filterMessage", "Filtro: " + name);
-    return "skills";
+    if(skillsFilter.isEmpty()){
+
+      redirectAttributes.addFlashAttribute("filterMessage", "No se encontraron resultados para: " + name);
+
+      return "redirect:/skills?filter="+name;
+    }
+    
+    redirectAttributes.addFlashAttribute("filterMessage", "Filtro: " + name);
+    return "redirect:/skills?filter="+name;
   }
 
   @GetMapping("/new")
